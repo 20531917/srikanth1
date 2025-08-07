@@ -61,6 +61,35 @@ WHERE NOT EXISTS (
     SELECT 1 FROM PITEMREVISION pir WHERE pir.ritems_tagu = pi.puid
 );
 
+-- 1.7: Count of Datasets by type and their total file size
+-- Helps in planning storage and file transfer strategy.
+SELECT
+    ds.pobject_type AS dataset_type,
+    COUNT(ds.puid) AS dataset_count,
+    SUM(f.pfile_size) / 1024 / 1024 AS total_size_mb
+FROM
+    PDATASET ds
+JOIN
+    PIMANFILE f ON ds.puid = f.pvolume_tagu
+GROUP BY
+    ds.pobject_type
+ORDER BY
+    total_size_mb DESC;
+
+-- 1.8: Find all ImanFile extensions
+-- Useful for understanding the types of files stored in the system (e.g., .prt, .asm, .pdf).
+SELECT
+    SUBSTR(poriginal_file_name, INSTR(poriginal_file_name, '.', -1) + 1) AS file_extension,
+    COUNT(*) AS file_count
+FROM
+    PIMANFILE
+WHERE
+    poriginal_file_name LIKE '%.%'
+GROUP BY
+    SUBSTR(poriginal_file_name, INSTR(poriginal_file_name, '.', -1) + 1)
+ORDER BY
+    file_count DESC;
+
 -- =================================================================================
 -- SECTION 2: MIGRATION VALIDATION QUERIES (Run on SOURCE and TARGET databases)
 -- Use these to compare data between the source and target systems after a test load.

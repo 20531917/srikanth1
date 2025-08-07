@@ -39,7 +39,11 @@ Before starting the main ETL process, run the health check utility on the source
 
 ### 4.2. ETL Scripts & Configuration
 
-The core of the migration is a set of utilities that handle the data. Each key script can be parameterized using a corresponding properties file in `etl/config/`.
+The core of the migration is a set of utilities that handle the data. The `.bat` scripts in the `etl/` directory are placeholders that define the logic and execution order for the migration.
+
+The actual C++ source code for these utilities is located in the **[`itk_source/`](./itk_source/)** directory. See the **[`itk_source/README.md`](./itk_source/README.md)** for detailed instructions on how to compile the utilities for a Windows environment.
+
+Once compiled, the resulting `.exe` files should be placed in a central `bin/` directory or called from their location by updating the `.bat` scripts.
 
 **Execution Order:**
 
