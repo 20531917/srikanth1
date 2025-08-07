@@ -1,0 +1,26 @@
+# This file defines the mapping rules for the transformation script.
+# Each section is identified by a header row starting with '#SECTION'.
+#
+#SECTION,TYPE_MAPPING
+#SourceType,TargetType
+MyPart,StandardPart
+MyDrawing,StandardDrawing
+MyDocument,StandardDocument
+#
+#SECTION,ATTRIBUTE_MAPPING
+#SourceAttribute,TargetAttribute
+pitem_id,item_id
+pitem_name,object_name
+pmy_custom_attr,custom_prop_1
+pold_status,release_status_list
+#
+#SECTION,STATUS_VALUE_MAPPING
+#SourceStatus,TargetStatus
+WIP,
+Frozen,Review
+Released,Production
+#
+#SECTION,DEFAULT_VALUES
+#TargetType,TargetAttribute,Value
+StandardPart,project_code,"PROJECT-X"
+StandardDrawing,is_migrated,"true"
