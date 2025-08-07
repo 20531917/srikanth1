@@ -52,10 +52,17 @@ This document outlines the proposed system architecture for the new Teamcenter e
 *   **Purpose:** A dedicated server for running the ETL scripts. This isolates the migration workload and prevents impact on source/target systems.
 *   **Server Specs:** [Server Name, OS, CPU, RAM]
 *   **Required Software:**
-    *   Teamcenter Rich Client (for ITK utilities)
-    *   Oracle Client
-    *   Python/Perl (for transformation scripts)
-    *   Sufficient storage for extracted data and logs.
+    *   **C++ Compiler:** Microsoft Visual Studio with the C++ toolchain to compile the custom ITK utilities.
+    *   **Teamcenter Rich Client:** Required to provide the ITK libraries and runtime environment for the migration utilities.
+    *   **Python:** Used for the transformation scripts.
+    *   **Oracle Client:** For database connectivity if needed.
+    *   **Git:** For version control of the migration scripts.
+    *   Sufficient storage for extracted data, log files, and exported physical files.
+
+*   **ETL Process:**
+    *   The migration process will use a set of custom-built C++ ITK utilities (see `/itk_source`) for high-performance data extraction and loading.
+    *   These utilities are orchestrated by the `.bat` scripts in the `/etl` directory.
+    *   Data transformation is handled by a central Python script.
 
 ## 6. Assumptions and Risks
 

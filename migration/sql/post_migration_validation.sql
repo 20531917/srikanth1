@@ -66,3 +66,19 @@ SELECT 'ERROR: Broken secondary relationships' AS "Check Name", r.puid
 FROM PIMANRELATION r
 LEFT JOIN PWORKSPACEOBJECT w ON r.rsecondary_objectu = w.puid
 WHERE w.puid IS NULL;
+
+-- 2.4: Check for missing Named References in migrated Datasets
+-- REASON: This query finds datasets that exist in the target but have no associated files.
+-- This could indicate a failure in the file import/attachment process.
+SELECT 'ERROR: Datasets with no named references' AS "Check Name", pobject_name, pobject_type
+FROM PDATASET
+WHERE puid NOT IN (SELECT r.psecondary_objectu FROM PIMANRELATION r WHERE r.rrelation_typeu = (SELECT puid FROM PIMANRELATIONTYPE WHERE prelation_name = 'IMAN_specification'));
+
+-- 2.5: Validate that CAD datasets have the correct named references
+-- ACTION: Customize the 'CAD_Dataset_Type' and 'Expected_Named_Ref' values.
+-- For example, for NX, this would be 'UGMASTER' and 'UGPART'.
+SELECT 'ERROR: CAD Datasets with incorrect named refs' AS "Check Name", d.pobject_name
+FROM PDATASET d
+JOIN PIMANRELATION rel ON d.puid = rel.psecondary_objectu
+JOIN PIMANRELATIONTYPE reltype ON rel.rrelation_typeu = reltype.puid
+WHERE d.pobject_type = 'CAD_Dataset_Type' AND reltype.prelation_name != 'Expected_Named_Ref';
